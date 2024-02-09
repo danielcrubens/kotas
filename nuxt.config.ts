@@ -5,4 +5,11 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/tailwindcss',
   ],
+  components: true,
+
+  css:
+    [
+      '@/assets/css/tailwind.css',
+      '@/assets/css/global.css',
+    ],
 })
