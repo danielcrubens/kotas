@@ -1,75 +1,54 @@
-# Nuxt 3 Minimal Starter
+## 💻 Sobre o projeto
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Desafio Técnico para a empresa Kotas.
+Consumir uma API e cotruir uma aplicação e Vue.js.
 
-## Setup
+### Requisitos
+**1** - Tela de listagem Pokémons, sendo 24 registros por página com paginação em Scroll (Infinita).
 
-Make sure to install the dependencies:
+**2** - Pesquisa de um Pokémon específico por ID ou Nome.
 
-```bash
-# npm
+**3** - Exibir o detalhe de um Pokémon ao clicar em um card, mostrando os seus efeitos.
+Exibir o detalhe de um Pokémon ao clicar em um card, mostrando os seus efeitos.
+(Deve ser redirecionado para um página nova, sendo possível
+também pesquisar um pokémon específico via parâmetro na url)
+
+**4** - Responsividade para visualização em dispositivos Móveis. 
+
+**5** - Aplicação de Clean Code no projeto.
+
+## :rocket:  Tecnologias utilizadas
+Esse projeto foi desenvolvido com a seguinte tecnologia:
+- [Nuxt](https://nuxt.com/)
+- [Tailwind ](https://tailwindcss.com/)
+- [Pinia ](https://pinia.vuejs.org/)
+- [Typescript ](https://www.typescriptlang.org/)
+
+## :zap:  Figma
+- [Protótipo](https://www.figma.com/file/7s6fPACcLCmef4JZ8cM35v/Teste-FrontEnd---Pokemon?node-id=0%3A1)
+
+
+## 💾 Instalação
+
+Instale todas as dependências do projeto
+
+```
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+Rode a aplicação
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+```
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
 
-Build the application for production:
 
-```bash
-# npm
-npm run build
+## 📝 License
 
-# pnpm
-pnpm run build
+Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+---
+<h5 align="center">
+    Feito com 🖤 ☕  by <a href="https://danielcrubens.github.io" target="_blank">Daniel Rubens</a>
+</h5>
