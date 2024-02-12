@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <input class="flex py-3 pl-4 justify-center align-baseline items-center w-full rounded-xl" type="text" placeholder="Pesquisar Pokémon por ID ou Nome" v-model="searchTerm" @input="onSearch">
+    <input class="flex py-3 pl-4 justify-center align-baseline items-center w-full rounded-xl" type="text" placeholder="Pesquise por nome ou código" v-model="searchTerm" @input="onSearch">
   </div>
 </template>
 
