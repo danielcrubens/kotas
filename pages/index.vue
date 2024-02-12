@@ -2,6 +2,8 @@
   <section class="mx-auto max-w-screen-xl px-4 md:px-24 overflow-y-scroll max-h-screen" ref="scrollContainer">
 
     <search-filter @search="handleSearch" />
+    <h1 class="font-bold md:text-2xl text-xl mt-3">Pokemon</h1>
+
     <section class="mx-auto max-w-screen-xl">
       <div v-if="isLoading" class="flex justify-center items-center h-screen">
         <Loading />
