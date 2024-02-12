@@ -1,91 +1,99 @@
 <template>
-    <section class="mx-auto max-w-screen-xl px-4  md:px-24 overflow-y-scroll max-h-screen">
+  <section class="mx-auto max-w-screen-xl px-4 md:px-24 overflow-y-scroll max-h-screen" ref="scrollContainer">
 
-  <input class="flex py-3 pl-4  justify-center align-baseline items-center w-full rounded-xl" type="text" placeholder="Pesquise po nome ou código" v-model="searchTerm" @input="searchPokemon">
-  
-  <section class="mx-auto max-w-screen-xl ">
-
-     <div  class="grid xl:grid-cols-5 md:grid-cols-3 grid-cols-2 grid-rows-4 gap-8 mt-5" ref="el">
-        <div class="bg-white rounded-xl w-full h-full shadow-lg hover:shadow-xl" v-for="pokemon in filteredPokemonList" :key="pokemon.name">
-           <div class="text-center ">
-              <div class="object-cover">
-                 <img class=" m-auto h-24 w-28" :src="pokemon.image" :alt="pokemon.name">
-              </div>
-              <h2 class="font-bold -mt-1">{{ pokemon.name }}</h2>
-              <p class="font-medium">Cod: {{ pokemon.id }}</p>
-              <div class="mt-8 pb-8 px-1  gap-2 flex justify-evenly items-center">
-                 <div v-for="type in pokemon.types" :key="type" class=" rounded-xl text-white w-20 h-auto  flex justify-around items-center" :style="{ backgroundColor: getTypeColor(type) }">{{ type }}</div>
-              </div>
-           </div>
-        </div>
-     </div>
-  </section>
+    <search-filter @search="handleSearch" />
+    <section class="mx-auto max-w-screen-xl">
+      <div v-if="isLoading" class="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+      
+      <div v-else-if="isError" class="flex justify-center items-center h-screen">
+        <p class="text-red-500 font- medium">Erro ao carregar os dados. Por favor, tente novamente mais tarde.</p>
+      </div>
+      
+      <div v-else class="grid xl:grid-cols-5 md:grid-cols-3 grid-cols-2 grid-rows-4 gap-8 mt-5" ref="pokemonContainer">
+        <pokemon-card v-for="pokemon in filteredPokemons" :key="pokemon.id" :pokemon="pokemon" />
+      </div>
+    </section>
   </section>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useInfiniteScroll } from '@vueuse/core';
 
 const searchTerm = ref('');
 const page = ref(0);
-const pokemonList = ref([]);
+const isLoading = ref(false);
+const isError = ref(false);
+const pokemons = ref([]);
 
-onMounted(() => {
+const loadPokemon = async () => {
+  try {
+    isLoading.value = true;
+
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${page.value * 10}&limit=10`);
+    if (!response.ok) {
+      throw new Error('Erro ao carregar os dados');
+    }
+
+    const { results } = await response.json();
+    await Promise.all(results.map(async (result) => {
+      const pokemonResponse = await fetch(result.url);
+      if (!pokemonResponse.ok) {
+        throw new Error('Erro ao carregar os dados do Pokémon');
+      }
+
+      const pokemon = await pokemonResponse.json();
+
+      const existingPokemon = pokemons.value.find(p => p.id === pokemon.id);
+      if (!existingPokemon) {
+        pokemons.value.push({
+          id: pokemon.id,
+          name: pokemon.name,
+          image: pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default,
+          types: pokemon.types.map((type) => type.type.name)
+        });
+      }
+    }));
+
+    isError.value = false;
+  } catch (error) {
+    console.error('Erro ao carregar os dados:', error);
+    isError.value = true;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+watchEffect(() => {
   loadPokemon();
 });
 
-const loadPokemon = async () => {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=24&offset=${page.value * 24}`);
-  const data = await response.json();
-  const pokemons = await Promise.all(data.results.map(async (pokemon) => {
-    const pokemonDataResponse = await fetch(pokemon.url);
-    const pokemonData = await pokemonDataResponse.json();
-    const types = pokemonData.types.map(type => type.type.name); 
-    return {
-      id: pokemonData.id,
-      name: pokemonData.name,
-      image: pokemonData.sprites.front_default,
-      types: types
-    };
-  }));
-  pokemonList.value = [...pokemonList.value, ...pokemons];
-};
+const orderedPokemons = computed(() => {
+  return pokemons.value.sort((a, b) => a.id - b.id);
+});
 
-const el = ref(null);
-
-useInfiniteScroll(
-  el,
-  () => {
-    page.value++;
-    loadPokemon();
-  },
-  { distance: 10 },
-);
-
-const filteredPokemonList = computed(() => {
+const filteredPokemons = computed(() => {
   if (!searchTerm.value) {
-    return pokemonList.value;
+    return orderedPokemons.value;
   } else {
     const regex = new RegExp(searchTerm.value, 'i');
-    return pokemonList.value.filter(pokemon => regex.test(pokemon.name) || pokemon.id.toString() === searchTerm.value);
+    return orderedPokemons.value.filter(pokemon => regex.test(pokemon.name) || pokemon.id.toString().startsWith(searchTerm.value));
   }
 });
-const getTypeColor = (type) => {
-  const typeColors = {
-    normal: '#C4C4C4',
-    flying: '#5317FC',
-    poison: '#AF08FE',
-    ground: '#85826E',
-    fire: '#FE0808 ',
-    water: '#00A3FF',
-    grass: '#08FEC3',
-    electric: '#FFB800',
-    fairy: '#FBA1EC',
-    bug:'#9bba48'
-    
-  };
-  return typeColors[type] || '#000'; 
-};
 
+const scrollContainer = ref(null);
+const pokemonContainer = ref(null);
+useInfiniteScroll(scrollContainer, () => {
+  page.value++;
+}, { distance: 500 });
+
+const handleSearch = (value) => {
+  searchTerm.value = value;
+};
 </script>
+
+
+
+
