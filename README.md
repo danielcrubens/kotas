@@ -1,7 +1,7 @@
 ## 💻 Sobre o projeto
 
 Desafio Técnico para a empresa Kotas.
-Consumir uma API e cotruir uma aplicação e Vue.js.
+Consumir uma API e construir uma aplicação e Vue.js.
 
 ### Requisitos
 **1** - Tela de listagem Pokémons, sendo 24 registros por página com paginação em Scroll (Infinita).
