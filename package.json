@@ -3,6 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check .",
+    "lint": "yarn lint:js && yarn lint:prettier",
+    "lintfix": "prettier --write --list-different . && yarn lint:js --fix",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -10,10 +14,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
     "@vueuse/nuxt": "^10.7.2",
     "nuxt": "^3.10.1",
+    "pinia": "^2.1.7",
     "vue": "^3.4.15",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.11.3"
