@@ -1,6 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme'
 
-const colors =require('tailwindcss/colors')
 
 module.exports = {
   mode: 'jit',
@@ -15,24 +14,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-       'lato': ['Lato', 'sans-serif'],
-       sans: ["Lato", ...defaultTheme.fontFamily.sans]
-      },
-      colors: {
-        'blue': {
-        DEFAULT: '#003088',
-      },
-      'gray': {
-        DEFAULT:'#E5E5E5',
-        100: '#333',
-      },
-      'orange': {
-        DEFAULT:'#f9ba02',
-      },
-      'link': {
-        DEFAULT: '#007bff',
-      },
-       
+       'mulish': ['Mulish', 'sans-serif'],
+       sans: ["Mulish", ...defaultTheme.fontFamily.sans]
       },
     },
     plugins: [],

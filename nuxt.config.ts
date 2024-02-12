@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
+    '@nuxtjs/google-fonts',
   ],
   components: true,
   css:
